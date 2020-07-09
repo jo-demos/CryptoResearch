@@ -1,0 +1,85 @@
+@model IEnumerable<CryptoResearch.Models.Currency>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">New coin</a>
+</p>
+<div class="row fluid">
+    <div class="col-lg-6 well">
+        @await Component.InvokeAsync("Currencys")
+    </div>
+    <div class="col-lg-6 well">
+        <partial name="_Chart" />
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    GetCurrencys = chartData => {
+        var quantity = 0, currencys = [];
+
+        while (quantity < chartData.length) {
+            currencys.push(chartData[quantity].name);
+            quantity++;
+        }
+
+        return currencys;
+    }
+
+    GetQuantityCurrency = chartData => {
+        var quantity = 0, values = [];
+
+        while (quantity < chartData.length) {
+            values.push(chartData[quantity].quantity);
+            quantity++;
+        }
+
+        return values;
+    }
+
+    GetColours = quantity => {
+        var colours = [];
+
+        while (quantity >= 0) {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+
+            colours.push(`rgb(${r}, ${r}, ${r})`);
+
+            quantity--;
+        }
+
+        return colours;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "Currencys/ChartData",
+        success: function(chartData) {
+            new Chart(document.getElementById("chart"), {
+                type: 'pie',
+                data: {
+                    labels: GetCurrencys(chartData),
+                    datasets: [
+                        {
+                            labels: "Quantity",
+                            borderWidth: 2,
+                            backgroundColor: GetColours(chartData.length),
+                            data: GetQuantityCurrency(chartData),
+                        },
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Total moedas"
+                    }
+                }
+            })
+        }
+    })
+</script>

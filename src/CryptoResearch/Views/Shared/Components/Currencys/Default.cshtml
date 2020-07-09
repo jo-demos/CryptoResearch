@@ -1,0 +1,19 @@
+@model IList<CryptoResearch.Models.Currency>
+
+<h4>What currency do you invest?</h1>
+<hr />
+
+<form asp-controller="Currencys" asp-action="SelectCurrencys" method="post" class="form-group">
+    @{
+        for (int i = 0; i < Model.Count(); i++)
+        {
+            <input asp-for="@Model[i].Checked" type="checkbox" />
+            <label asp-for="@Model[i].Id">@Model[i].Name</label>
+            <input asp-for="@Model[i].Id" type="hidden" />
+            <input asp-for="@Model[i].Name" type="hidden" />
+            <br />
+        }
+    }
+
+    <input type="submit" value="Enviar" class="btn btn-primary" />
+</form>
