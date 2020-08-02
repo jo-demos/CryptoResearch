@@ -9,6 +9,7 @@ namespace CryptoResearch.Models
 
         public MyContext(DbContextOptions<MyContext> opcoes) : base(opcoes)
         {
+            Database.Migrate();
         }
     }
 }
